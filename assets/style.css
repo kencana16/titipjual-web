@@ -1,0 +1,30 @@
+#user-icon{
+    display:inline-block;
+    font-size: 1rem;
+    line-height: 2rem;
+    background-color:#b8b8b8;
+    color:white;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+/* tampilan hp */
+@media screen and (max-width: 767px){
+    .hide-mobile{
+        display: none;
+    }
+    .dataTables_filter, .dataTables_length {
+        float:left !important;
+    }
+    .dataTables_filter{
+        margin-left: -12px !important;
+    }
+    .dataTables_paginate{
+        margin-left: -12px !important;
+    }
+    .dataTables_info{
+        margin-right: -12px !important;
+    }
+}

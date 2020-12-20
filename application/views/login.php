@@ -7,7 +7,7 @@
 
     <style>
         .bg-login-image{
-            background:url(<?= site_url()."assets/images/cover.png"?>);
+            background:url(<?= site_url('assets/images/cover.png')?>);
             background-position:center;
             background-size:contain;
             background-repeat: no-repeat;
@@ -36,17 +36,22 @@
                                         <h1 class="h5 text-gray-800 mb-4">SISTEM PENCATATAN KEUANGAN UMKM ‘HALAL BERKAH’</h1>
                                         <h1 class="h3 text-gray-900 mb-4">Login</h1>
                                     </div>
-                                    <form class="user">
+                                    <?php if ($this->session->flashdata('error')): ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <?php echo $this->session->flashdata('error') ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <form class="user" action="<?= base_url('login/check_login')?>" method="POST">
                                         <div class="form-group">
                                             <!-- <label for="email">E-mail</label> -->
                                             <input type="email" class="form-control form-control-user"
-                                                id="email" aria-describedby="emailHelp"
+                                                name="usernameoremail" id="usernameoremail" aria-describedby="emailHelp"
                                                 placeholder="Masukkan Email">
                                         </div>
                                         <div class="form-group">
                                             <!-- <label for="password">Kata Sandi</label> -->
                                             <input type="password" class="form-control form-control-user"
-                                                id="password" placeholder="Kata Sandi">
+                                                name="password" id="password" placeholder="Kata Sandi">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -54,10 +59,9 @@
                                                 <label class="custom-control-label" for="customCheck">Ingat saya</label>
                                             </div>
                                         </div>
-                                        <a href="<?= base_url().'dashboard'?>" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
-                        
+                                        </button>
                                     </form>
                                     <hr>
                                     <div class="text-center">

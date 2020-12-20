@@ -367,11 +367,11 @@
     <?php $this->load->view('_partial/jsScript') ?>
 
     <!-- Chart.js Import -->
-    <script src="<?= base_url()?>assets/chart.js/Chart.min.js"></script>
+    <script src="<?= base_url('assets/chart.js/Chart.min.js')?>"></script>
 
     <!-- Chart.js custom scripts -->
-    <script src="<?= base_url()?>assets/sb-admin-2/js/demo/chart-area-demo.js"></script>
-    <script src="<?= base_url()?>assets/sb-admin-2/js/demo/chart-pie-demo.js"></script>
+    <script src="<?= base_url('assets/sb-admin-2/js/demo/chart-area-demo.js')?>"></script>
+    <script src="<?= base_url('assets/sb-admin-2/js/demo/chart-pie-demo.js')?>"></script>
 
 </body>
 

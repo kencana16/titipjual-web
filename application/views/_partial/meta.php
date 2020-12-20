@@ -19,5 +19,5 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<?= base_url()?>assets/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="<?= base_url()?>assets/style.css" rel="stylesheet">
+    <link href="<?= base_url('assets/sb-admin-2/css/sb-admin-2.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('assets/style.css')?>" rel="stylesheet">

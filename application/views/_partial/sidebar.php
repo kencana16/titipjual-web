@@ -14,7 +14,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="<?=base_url().'dashboard'?>">
+        <a class="nav-link" href="<?=site_url('dashboard')?>">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -37,8 +37,8 @@
         <div id="collapseBarang" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Tabel Barang</h6>
-                <a class="collapse-item" href="<?= base_url().'barang/tambah_barang' ?>">Tambah barang</a>
-                <a class="collapse-item" href="<?= base_url().'barang/daftar_barang' ?>">Lihat daftar barang</a>
+                <a class="collapse-item" href="<?= site_url('barang/tambah_barang') ?>">Tambah barang</a>
+                <a class="collapse-item" href="<?= site_url('barang/daftar_barang') ?>">Lihat daftar barang</a>
             </div>
         </div>
     </li>
@@ -54,8 +54,8 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Tabel Penjual</h6>
-                <a class="collapse-item" href="<?= base_url().'penjual/tambah_penjual' ?>">Tambah penjual</a>
-                <a class="collapse-item" href="<?= base_url().'penjual/daftar_penjual' ?>">Lihat daftar penjual</a>
+                <a class="collapse-item" href="<?= site_url('penjual/tambah_penjual') ?>">Tambah penjual</a>
+                <a class="collapse-item" href="<?= site_url('penjual/daftar_penjual') ?>">Lihat daftar penjual</a>
             </div>
         </div>
     </li>

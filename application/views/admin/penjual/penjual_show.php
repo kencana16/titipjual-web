@@ -122,8 +122,7 @@
     <?php $this->load->view('_partial/jsScript') ?>
 
     <!-- datatables Import-->
-    <script src="<?= base_url()?>assets/datatables/jquery.dataTables.min.js"></script>
-    <script src="<?= base_url()?>assets/datatables/dataTables.bootstrap4.min.js"></script>
+    <?php $this->load->view('_partial/jsDatatables') ?>
     <script>
         $(document).ready( function () {
             var t = $('#barangTable').DataTable( {

@@ -39,7 +39,7 @@
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Pendapatan hari ini -->
+                        <!-- card -->
                         <div class="col-12">
                             <div class="card shadow">
                                 <div class="card-header">

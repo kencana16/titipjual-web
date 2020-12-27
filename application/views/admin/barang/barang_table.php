@@ -39,7 +39,7 @@
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Pendapatan hari ini -->
+                        <!-- card -->
                         <div class="col-12">
                             <div class="card shadow ">
                                 <div class="card-header">
@@ -50,7 +50,7 @@
                                         <div class="table-responsive">
                                             <table id="barangTable" class="table table-bordered" width="100%" cellspacing="0">
                                                 <thead>
-                                                    <th>No</th>
+                                                    <th>No</th>4
                                                     <th>Nama Produk</th>
                                                     <th>Harga Normal</th>
                                                     <th>Harga Reseller</th>

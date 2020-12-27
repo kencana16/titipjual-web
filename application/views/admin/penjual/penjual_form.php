@@ -31,39 +31,64 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Tambah Barang</h1>
+                        <h1 class="h3 mb-0 text-gray-800">
+                            <?php echo isset($penjual) ? 'Edit penjual':'Tambah penjual' ?>
+                        </h1>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Pendapatan hari ini -->
+                        <!-- card -->
                         <div class="col-12">
                             <div class="card shadow">
                                 <div class="card-header">
-                                    <h6 class="m-0 font-weight-bold text-primary">Tambah Barang Baru</h6>
+                                <a class="btn btn-sm text-primary" href="<?php echo site_url('penjual/daftar_penjual') ?>"><i class="fas fa-arrow-left mr-1"></i> Kembali<span class="hide-mobile"> ke daftar penjual</span></a>
                                 </div>
                                 <div class="card-body">
                                    <div class="col py-2">
+                                        <?php if ($this->session->flashdata('success')): ?>
+                                            <div class="alert alert-success" role="alert">
+                                                <?php echo $this->session->flashdata('success'); ?>
+                                            </div>
+                                        <?php endif; ?>
+
                                         <form action="" method="post">
+                                            <input type="hidden" name="idPenjual" 
+                                                <?php echo isset($penjual) ? 'value="'.$penjual->id_penjual.'"':'' ?>>
+
                                             <div class="form-group row">
                                                 <label for="namaPenjual" class="col-lg-2 col-form-label">Nama Penjual</label>
                                                 <div class="col-lg-10">
-                                                    <input type="text" class="form-control" id="namaPenjual"  placeholder="">
+                                                    <input type="text" class="form-control <?php echo form_error('namaPenjual') ? 'is-invalid':'' ?>"
+                                                     id="namaPenjual" name="namaPenjual" 
+                                                     <?php echo isset($penjual) ? 'value="'.$penjual->nama_penjual.'"':'' ?>>
+                                                    <div class="invalid-feedback">
+                                                        <?php echo form_error('namaPenjual') ?>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
-                                                <label for="noHP" class="col-lg-2 col-form-label">No. telepon</label>
+                                                <label for="noHP" class="col-lg-2 col-form-label">No. Telepon</label>
                                                 <div class="input-group col-lg-10">
-                                                    <input type="text" class="form-control" id="noHP"  placeholder="">
+                                                    <input type="number" class="form-control <?php echo form_error('noHP') ? 'is-invalid':'' ?>" 
+                                                     id="noHP" name="noHP"
+                                                     <?php echo isset($penjual) ? 'value="'.$penjual->no_hp.'"':'' ?>>
+                                                    <div class="invalid-feedback">
+                                                        <?php echo form_error('noHP') ?>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label for="alamat" class="col-lg-2 col-form-label">Alamat</label>
                                                 <div class="col-lg-10">
-                                                    <textarea class="form-control" id="alamat" row="3"></textarea>
+                                                    <textarea class="form-control <?php echo form_error('alamat') ? 'is-invalid':'' ?>" 
+                                                     id="alamat" name="alamat" row="3"><?php echo isset($penjual) ? $penjual->alamat : '' ?></textarea>
+                                                    <div class="invalid-feedback">
+                                                        <?php echo form_error('alamat') ?>
+                                                    </div>
                                                 </div>
                                             </div>
 

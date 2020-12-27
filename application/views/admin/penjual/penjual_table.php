@@ -32,22 +32,22 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Daftar Barang</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Daftar Penjual</h1>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Pendapatan hari ini -->
+                        <!-- card -->
                         <div class="col-12">
                             <div class="card shadow ">
                                 <div class="card-header">
-                                    <h6 class="m-0 font-weight-bold text-primary">Tambah Barang Baru</h6>
+                                <a class="btn btn-sm text-primary" href="<?php echo site_url('penjual/tambah_penjual') ?>"><i class="fas fa-plus mr-1"></i> Tambah penjual</a>
                                 </div>
                                 <div class="card-body">
                                     <div class="col py-2">
                                         <div class="table-responsive">
-                                            <table id="barangTable" class="table table-bordered" width="100%" cellspacing="0">
+                                            <table id="penjualTable" class="table table-bordered" width="100%" cellspacing="0">
                                                 <thead>
                                                     <th>No</th>
                                                     <th>Nama Penjual</th>
@@ -56,27 +56,26 @@
                                                     <th>Aksi</th>
                                                 </thead>
                                                 <tbody>
+                                                    <?php foreach($penjuals as $penjual):?>
                                                     <tr>
                                                         <td></td>
-                                                        <td>2</td>
-                                                        <td>90</td>
-                                                        <td>1</td>
-                                                        <td>4</td>
+                                                        <td><?= $penjual->nama_penjual?></td>
+                                                        <td><?= $penjual->no_hp?></td>
+                                                        <td><?= $penjual->alamat?></td>
+                                                        <td class="text-md-left text-center">
+                                                            <a class="btn btn-sm btn-primary m-1 " href="<?=site_url('penjual/edit_penjual/'.$penjual->id_penjual)?>">
+                                                                <i class="fas fa-edit"></i>
+                                                                <span class="hide-mobile ml-1">edit</span>
+                                                            </a>
+                                                            <a class="btn btn-sm btn-danger open-DeleteDataModal m-1" href="#" 
+                                                            data-toggle="modal" data-target="#deleteDataModal" 
+                                                            data-id="<?=$penjual->id_penjual?>" data-name="<?=$penjual->nama_penjual?>">
+                                                                <i class="fas fa-trash"></i>
+                                                                <span class="hide-mobile ml-1">hapus</span>
+                                                            </a>
+                                                        </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>6</td>
-                                                        <td>3</td>
-                                                        <td>6</td>
-                                                        <td>8</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>3</td>
-                                                        <td>5</td>
-                                                        <td>7</td>
-                                                        <td>3</td>
-                                                    </tr>
+                                                    <?php endforeach; ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -117,6 +116,7 @@
 
     <!-- Logout Modal-->
     <?php $this->load->view('_partial/modal_logout') ?>
+    <?php $this->load->view('_partial/modal_delete_data') ?>
 
     <!-- Javascript Import -->
     <?php $this->load->view('_partial/jsScript') ?>
@@ -125,7 +125,7 @@
     <?php $this->load->view('_partial/jsDatatables') ?>
     <script>
         $(document).ready( function () {
-            var t = $('#barangTable').DataTable( {
+            var t = $('#penjualTable').DataTable( {
                 "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
@@ -144,6 +144,15 @@
                     cell.innerHTML = i+1;
                 } );
             } ).draw();
+
+            $(document).on("click", ".open-DeleteDataModal", function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                console.log(name);
+                $("#deleteDataModal").find($("#keterangan")).text(" "+name);
+                $("#deleteDataModal").find($(".btn-delete")).attr("href", '<?=site_url('penjual/hapus_penjual/')?>'+id);
+                
+            });
         } );
     </script>
 

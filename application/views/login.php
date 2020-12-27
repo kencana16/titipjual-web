@@ -37,7 +37,7 @@
                                         <h1 class="h3 text-gray-900 mb-4">Login</h1>
                                     </div>
                                     <?php if ($this->session->flashdata('error')): ?>
-                                        <div class="alert alert-danger" role="alert">
+                                        <div id="alert" class="alert alert-danger" role="alert">
                                             <?php echo $this->session->flashdata('error') ?>
                                         </div>
                                     <?php endif; ?>
@@ -80,6 +80,13 @@
     </div>
 
     <?php $this->load->view('_partial/jsScript') ?>
+
+    <script>
+        setTimeout(() => {
+            const alert = document.getElementById("alert");
+            alert.parentNode.removeChild(alert);
+        }, 5000);
+    </script>
 
 </body>
 

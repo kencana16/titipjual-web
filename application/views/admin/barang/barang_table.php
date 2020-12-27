@@ -43,10 +43,7 @@
                         <div class="col-12">
                             <div class="card shadow ">
                                 <div class="card-header">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Tambah Barang Baru</h6>
-                                        <button class="btn btn-sm btn-outline-primary hide-mobile" href="<?php echo site_url('admin/produk/tambah') ?>"><i class="fas fa-plus"></i> Tambah Produk</button>
-                                    </div>
+                                    <a class="btn btn-sm text-primary" href="<?php echo site_url('barang/tambah_barang') ?>"><i class="fas fa-plus mr-1"></i> Tambah Produk</a>
                                 </div>
                                 <div class="card-body">
                                     <div class="col py-2">
@@ -60,27 +57,26 @@
                                                     <th>Aksi</th>
                                                 </thead>
                                                 <tbody>
+                                                    <?php foreach($barangs as $barang): ?>
                                                     <tr>
                                                         <td></td>
-                                                        <td>2</td>
-                                                        <td>90</td>
-                                                        <td>1</td>
-                                                        <td>4</td>
+                                                        <td><?= $barang->nama_barang?></td>
+                                                        <td class="text-right"><?= 'Rp.&nbsp;'.number_format($barang->harga_satuan_normal)?></td>
+                                                        <td class="text-right"><?= 'Rp.&nbsp;'.number_format($barang->harga_satuan_reseller)?></td>
+                                                        <td class="text-md-left text-center">
+                                                            <a class="btn btn-sm btn-primary m-1 " href="<?=site_url('barang/edit_barang/'.$barang->id_barang)?>">
+                                                                <i class="fas fa-edit"></i>
+                                                                <span class="hide-mobile ml-1">edit</span>
+                                                            </a>
+                                                            <a class="btn btn-sm btn-danger open-DeleteDataModal m-1" href="#" 
+                                                            data-toggle="modal" data-target="#deleteDataModal" 
+                                                            data-id="<?=$barang->id_barang?>" data-name="<?=$barang->nama_barang?>">
+                                                                <i class="fas fa-trash"></i>
+                                                                <span class="hide-mobile ml-1">hapus</span>
+                                                            </a>
+                                                        </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>6</td>
-                                                        <td>3</td>
-                                                        <td>6</td>
-                                                        <td>8</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>3</td>
-                                                        <td>5</td>
-                                                        <td>7</td>
-                                                        <td>3</td>
-                                                    </tr>
+                                                    <?php endforeach; ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -119,8 +115,9 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
+    <!-- Modal-->
     <?php $this->load->view('_partial/modal_logout') ?>
+    <?php $this->load->view('_partial/modal_delete_data') ?>
 
     <!-- Javascript Import -->
     <?php $this->load->view('_partial/jsScript') ?>
@@ -139,7 +136,7 @@
                     "searchable": false,
                     "orderable": false,
                     "targets": 4
-                }, ],
+                } ],
                 "order": [[ 1, 'asc' ]]
             } );
 
@@ -148,6 +145,16 @@
                     cell.innerHTML = i+1;
                 } );
             } ).draw();
+
+
+            $(document).on("click", ".open-DeleteDataModal", function () {
+                var barangId = $(this).data('id');
+                var barangName = $(this).data('name');
+                console.log(barangName);
+                $("#deleteDataModal").find($("#keterangan")).text(" "+barangName);
+                $("#deleteDataModal").find($(".btn-delete")).attr("href", '<?=site_url('barang/hapus_barang/')?>'+barangId);
+                
+            });
         } );
     </script>
 

@@ -8,6 +8,8 @@
                 'nama_penjual' => $this->input->post('namaPenjual'),
                 'no_hp' => $this->input->post('noHP'),
                 'alamat' => $this->input->post('alamat'),
+                'date_created' => date('Y-m-d H:i:s',now()),
+                'date_modified' => date('Y-m-d H:i:s',now())
             );
             return $this->db->insert($this->_table_name, $data);
         }
@@ -17,6 +19,7 @@
                 'nama_penjual' => $this->input->post('namaPenjual'),
                 'no_hp' => $this->input->post('noHP'),
                 'alamat' => $this->input->post('alamat'),
+                'date_modified' => date('Y-m-d H:i:s',now())
             );
             return $this->db->where('id_penjual', $id)->update($this->_table_name, $data);
         }

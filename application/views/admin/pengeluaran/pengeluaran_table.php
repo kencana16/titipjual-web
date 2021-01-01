@@ -59,11 +59,11 @@
                                                     <?php foreach($pengeluarans as $pengeluaran):?>
                                                     <tr>
                                                         <td></td>
-                                                        <td><?= $pengeluaran->tgl_pengeluaran?></td>
-                                                        <td><?= $pengeluaran->jenis?></td>
+                                                        <td class="tanggal-indo"><?= $pengeluaran->tgl_pengeluaran?></td>
+                                                        <td><?= ucfirst($pengeluaran->jenis)?></td>
                                                         <td><?= 'Rp. '.number_format($pengeluaran->jml_pengeluaran)?></td>
                                                         <td class="text-md-left text-center">
-                                                            <a class="btn btn-sm btn-primary m-1 " href="<?=site_url('pengeluaran/detail_penjual/'.$pengeluaran->id_pengeluaran)?>">
+                                                            <a class="btn btn-sm btn-primary m-1 " href="<?=site_url('pengeluaran/detail_pengeluaran/'.$pengeluaran->id_pengeluaran)?>">
                                                                 <i class="fas fa-info-circle"></i>
                                                                 <span class="hide-mobile ml-1">Detail</span>
                                                             </a>
@@ -129,7 +129,6 @@
                     "orderable": false,
                     "targets": 4
                 }, ],
-                "order": [[ 1, 'asc' ]]
             } );
 
             t.on( 'order.dt search.dt', function () {
@@ -139,6 +138,7 @@
             } ).draw();
         } );
     </script>
+    <script src="<?=base_url('assets/tanggal-indo.js')?>"></script>
 
 </body>
 

@@ -1,4 +1,4 @@
-<!-- Logout Modal-->
+<!-- delete confirm Modal-->
 <div class="modal fade" id="deleteDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">

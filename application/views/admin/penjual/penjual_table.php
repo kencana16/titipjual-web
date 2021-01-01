@@ -148,7 +148,6 @@
             $(document).on("click", ".open-DeleteDataModal", function () {
                 var id = $(this).data('id');
                 var name = $(this).data('name');
-                console.log(name);
                 $("#deleteDataModal").find($("#keterangan")).text(" "+name);
                 $("#deleteDataModal").find($(".btn-delete")).attr("href", '<?=site_url('penjual/hapus_penjual/')?>'+id);
                 

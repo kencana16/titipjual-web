@@ -50,7 +50,7 @@
                                         <div class="table-responsive">
                                             <table id="barangTable" class="table table-bordered" width="100%" cellspacing="0">
                                                 <thead>
-                                                    <th>No</th>4
+                                                    <th>No</th>
                                                     <th>Nama Produk</th>
                                                     <th>Harga Normal</th>
                                                     <th>Harga Reseller</th>
@@ -148,11 +148,10 @@
 
 
             $(document).on("click", ".open-DeleteDataModal", function () {
-                var barangId = $(this).data('id');
-                var barangName = $(this).data('name');
-                console.log(barangName);
-                $("#deleteDataModal").find($("#keterangan")).text(" "+barangName);
-                $("#deleteDataModal").find($(".btn-delete")).attr("href", '<?=site_url('barang/hapus_barang/')?>'+barangId);
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                $("#deleteDataModal").find($("#keterangan")).text(" "+name);
+                $("#deleteDataModal").find($(".btn-delete")).attr("href", '<?=site_url('barang/hapus_barang/')?>'+id);
                 
             });
         } );

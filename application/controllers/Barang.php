@@ -18,8 +18,7 @@ class Barang extends CI_Controller {
 	{
 		$validation = $this->form_validation->set_rules($this->barang_models->rules());
 		if($validation->run()){
-			$this->barang_models->add();
-			$this->session->set_flashdata('success', 'Berhasil Ditambah');
+			if($this->barang_models->add()) $this->session->set_flashdata('success', 'Berhasil Ditambah');
             redirect(current_url());
 		}
 		$this->load->view('admin/barang/barang_form');
@@ -31,22 +30,19 @@ class Barang extends CI_Controller {
 		$this->load->view('admin/barang/barang_table', $data);
 	}
 
-	public function detail_barang($id){
+	public function edit_barang($id = null){
+		if(!isset($id)) show_404();
 
-	}
-
-	public function edit_barang($id){
 		$validation = $this->form_validation->set_rules($this->barang_models->rules());
 		if($validation->run()){
-			$this->barang_models->edit($id);
-			$this->session->set_flashdata('success', 'Berhasil Diupdate');
+			if($this->barang_models->edit($id)) $this->session->set_flashdata('success', 'Berhasil Diupdate');
             redirect(current_url());
 		}
 		$data['barang'] = $this->barang_models->showById($id);
 		$this->load->view('admin/barang/barang_form', $data);
 	}
 
-	public function hapus_barang($id){
+	public function hapus_barang($id = null){
 		if(!isset($id)) show_404();
 
         if($this->barang_models->delete($id)){

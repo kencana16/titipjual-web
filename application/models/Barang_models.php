@@ -8,6 +8,8 @@
                 'nama_barang' => $this->input->post('namaBarang'),
                 'harga_satuan_normal' => $this->input->post('hargaNormal'),
                 'harga_satuan_reseller' => $this->input->post('hargaReseller'),
+                'date_created' => date('Y-m-d H:i:s',now()),
+                'date_modified' => date('Y-m-d H:i:s',now())
             );
             return $this->db->insert($this->_table_name, $data);
         }
@@ -17,6 +19,8 @@
                 'nama_barang' => $this->input->post('namaBarang'),
                 'harga_satuan_normal' => $this->input->post('hargaNormal'),
                 'harga_satuan_reseller' => $this->input->post('hargaReseller'),
+                'date_modified' => date('Y-m-d H:i:s',now())
+                
             );
             return $this->db->where('id_barang', $id)->update($this->_table_name, $data);
         }

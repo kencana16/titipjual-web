@@ -64,7 +64,7 @@
                                                 <label for="tgl" class="col-lg-2 col-form-label">Tanggal Pengeluaran</label>
                                                 <div class="col-lg-10">
                                                     <input type="date" class="form-control <?php echo form_error('tgl') ? 'is-invalid':'' ?>"
-                                                     id="tgl" name="tgl"  placeholder="">
+                                                     id="tgl" name="tgl"  placeholder="" min="<?=Date("Y-m-d")?>" >
                                                 </div>
                                             </div>
 
@@ -73,6 +73,7 @@
                                                 <div class="input-group col-lg-10">
                                                 <select class="custom-select" name="jenis" id="jenis">
                                                     <option value="pengeluaran harian" selected>Pengeluaran harian (Modal)</option>
+                                                    <option value="pengeluaran pesanan">Pengeluaran pesanan</option>
                                                     <option value="lainnya">Lainnya</option>
                                                 </select>
                                                 </div>
@@ -104,6 +105,18 @@
                                                     <a href="#" class="add-field btn btn-sm btn-outline-primary col-md-1 mb-2 mb-md-0"><i class="fas fa-plus"></i></a>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-sm-6 text-lg-right"></div>
+                                                <div class="col-lg-4 col-sm-6 p-0">
+                                                    <div class="input-group  border border-primary rounded">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp.</div>
+                                                        </div>
+                                                        <input type="text" class="form-control font-weight-bold bg-light" 
+                                                         name="total" placeholder="Total" aria-label="total" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <button type="submit" class="btn btn-primary mt-4">Simpan</button>
 
@@ -123,13 +136,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>
@@ -186,6 +193,14 @@
             }
         }
 
+        function removeFormatting(value){
+            var group = new Intl.NumberFormat().format(1111).replace(/1/g, '');
+            var decimal = new Intl.NumberFormat().format(1.1).replace(/1/g, '');
+            var reversedVal = value.replace(new RegExp('\\' + group, 'g'), '');
+            reversedVal = reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+            return reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+        }
+
         document.getElementById('tgl').valueAsDate = new Date();
 
         $('.add-field').click(function(){
@@ -201,12 +216,30 @@
                 $(this).removeClass('is-invalid');
             });
             
+            
             const prices = document.querySelectorAll('.price');
             priceFormat(prices[prices.length-2]);
+
+            $('html, body').animate({
+                scrollTop: $(".barang-group").offset().top
+            }, 1000);
         });
         $(document).on('click', '.remove-field', function(e) {
             $(this).parents('.remove').remove();
             e.preventDefault();
+        });
+
+        $('input[name="harga[]"]').focusout(function(){
+            var total = 0;
+            $('input[name="harga[]"]').each(function(){
+                console.log("+"+parseInt(removeFormatting($(this).val())));
+                console.log($(this));
+                subtotal = parseInt(removeFormatting($(this).val()));
+                if(Number.isNaN(subtotal)){return;};
+                total += subtotal;
+                console.log("total : "+total);
+            });
+            $('input[name="total"]').val(Intl.NumberFormat().format(total));
         });
 
         function dataValidation(){

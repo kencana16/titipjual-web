@@ -6,11 +6,14 @@
 
     <?php
         $title = "PAO";
-        if(!$this->uri->segment(2) == ""){
+        if($this->uri->segment(2) != ""){
             $title = "PAO - ".str_replace("_", " ", ucfirst($this->uri->segment(2)));
+        }else{
+            $title = "PAO - ".str_replace("_", " ", ucfirst($this->uri->segment(1)));
         }
     ?>
     <title><?=$title?></title>
+    <link href="<?=base_url('favicon.ico')?>" rel="shortcut icon" type="image/x-icon" />
 
     <!-- Custom fonts for this template-->
     <link href="<?= base_url()?>assets/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

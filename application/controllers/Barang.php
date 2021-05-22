@@ -10,6 +10,9 @@ class Barang extends CI_Controller {
 			$this->session->set_flashdata('error', 'Harap login terlebih dahulu');
 			redirect('login');
 		}
+		if($this->session->userdata('role') == 1){
+			redirect('penjualanku');
+		}
 
 		$this->load->model('barang_models');
 	}
@@ -18,8 +21,10 @@ class Barang extends CI_Controller {
 	{
 		$validation = $this->form_validation->set_rules($this->barang_models->rules());
 		if($validation->run()){
-			if($this->barang_models->add()) $this->session->set_flashdata('success', 'Berhasil Ditambah');
-            redirect(current_url());
+			if($this->barang_models->add()) {
+				$this->session->set_flashdata('success', 'Berhasil Ditambah');
+				redirect(current_url());
+			}
 		}
 		$this->load->view('admin/barang/barang_form');
 	}
@@ -49,4 +54,10 @@ class Barang extends CI_Controller {
             redirect(site_url('barang/daftar_barang'));
         }
 	}
+
+	public function get_barang_json()
+	{
+		echo json_encode($this->barang_models->getJsonBarang());
+	}
+
 }

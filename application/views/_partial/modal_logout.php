@@ -12,7 +12,7 @@
                 <div class="modal-body">Apakah anda yakin ingin keluar?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                    <a class="btn btn-primary" href="<?= site_url('login/logout') ?>">Keluar</a>
+                    <a class="btn btn-danger" href="<?= site_url('login/logout') ?>">Keluar</a>
                 </div>
             </div>
         </div>

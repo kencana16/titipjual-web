@@ -10,6 +10,9 @@ class Penjual extends CI_Controller {
 			$this->session->set_flashdata('error', 'Harap login terlebih dahulu');
 			redirect('login');
 		}
+		if($this->session->userdata('role') == 1){
+			redirect('penjualanku');
+		}
 
 		$this->load->model('penjual_models');
 	}
@@ -18,7 +21,9 @@ class Penjual extends CI_Controller {
 	{
 		$validation = $this->form_validation->set_rules($this->penjual_models->rules());
 		if($validation->run()){
-			if($this->penjual_models->add()) $this->session->set_flashdata('success', 'Berhasil Ditambah');
+			if($this->penjual_models->add()){
+				$this->session->set_flashdata('success', 'Berhasil Ditambah');
+			} 
             redirect(current_url());
 		}
 		$this->load->view('admin/penjual/penjual_form');

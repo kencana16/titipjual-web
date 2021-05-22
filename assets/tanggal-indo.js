@@ -1,8 +1,12 @@
-$('.tanggal-indo').each(function(){
-    $(this).text(tanggalIndo($(this).text()));
+$('.tanggal-indo').each(function () {
+    $(this).text(tanggalIndo($(this).text(), "tgl"));
+})
+$('.bulan-indo').each(function () {
+    $(this).text(tanggalIndo($(this).text(), "bln"));
 })
 
-function tanggalIndo(tempDate) {
+function tanggalIndo(tempDate, mode = "tgl") {
+
     var date = new Date(tempDate);
     var tahun = date.getFullYear();
     var bulan = date.getMonth();
@@ -33,6 +37,12 @@ function tanggalIndo(tempDate) {
         case 10: bulan = "November"; break;
         case 11: bulan = "Desember"; break;
     }
-    var tampilTanggal = hari + ", " + tanggal + " " + bulan + " " + tahun;
+
+    var tampilTanggal = " ";
+    if (mode === "tgl") {
+        tampilTanggal = hari + ", " + tanggal + " " + bulan + " " + tahun;
+    } else if (mode === "bln") {
+        tampilTanggal = bulan + " " + tahun;
+    }
     return tampilTanggal;
 }

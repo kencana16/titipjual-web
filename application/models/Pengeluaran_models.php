@@ -24,7 +24,7 @@
                 }
                 $data = array(
                     'id_pengeluaran' => $idPengeluaran,
-                    'nama_barang' => $barang,
+                    'nama_barang' => ucfirst($barang),
                     'jumlah_barang' => $arrJumlah[$key],
                     'harga' => $arrHarga[$key],
                     'date_created' => date('Y-m-d H:i:s',now()),
@@ -49,7 +49,7 @@
             $this->db->where('id_pengeluaran', $id)->update($this->_table_name, $data);
 
             //remove deleted data in database
-            $DbBarangIds =  $this->db->query('SELECT `id_detail_pengeluaran` FROM `detail_pengeluaran` where `id_pengeluaran`= 25')->result();
+            $DbBarangIds =  $this->db->query("SELECT `id_detail_pengeluaran` FROM `detail_pengeluaran` where `id_pengeluaran`= $id")->result();
             $tempIds;
             foreach($DbBarangIds as $key => $DbBarangId){
                 $tempId[$key] = $DbBarangId->id_detail_pengeluaran;
@@ -73,7 +73,7 @@
                     //add new data in database
                     $data = array(
                         'id_pengeluaran' => $id,
-                        'nama_barang' => $barang,
+                        'nama_barang' => ucfirst($barang),
                         'jumlah_barang' => $arrJumlah[$key],
                         'harga' => $arrHarga[$key],
                         'date_created' => date('Y-m-d H:i:s',now()),
@@ -94,7 +94,7 @@
         }
 
         public function showAll(){
-            $query = "SELECT p.id_pengeluaran, tgl_pengeluaran, jenis, SUM(harga) jml_pengeluaran 
+            $query = "SELECT p.*, SUM(harga) jml_pengeluaran 
              FROM pengeluaran p 
              INNER JOIN detail_pengeluaran dp 
                 ON p.id_pengeluaran = dp.id_pengeluaran 
@@ -104,7 +104,7 @@
         }
         
         public function showByID($id){
-            $query = "SELECT p.id_pengeluaran, tgl_pengeluaran, jenis, SUM(harga) jml_pengeluaran 
+            $query = "SELECT p.*, SUM(harga) jml_pengeluaran 
              FROM pengeluaran p 
              INNER JOIN detail_pengeluaran dp 
                 ON p.id_pengeluaran = dp.id_pengeluaran 
@@ -116,6 +116,7 @@
             $data =  array(
                 'id_pengeluaran'=>$id
             );
+            $this->db->delete($this->_detail_table_name, $data);
             return $this->db->delete($this->_table_name, $data);
         }
         
@@ -124,6 +125,57 @@
                 'id_pengeluaran'=>$id
             );
             return $this->db->order_by('nama_barang', 'ASC')->get_where($this->_detail_table_name, $data)->result();
+        }
+
+        public function costThisMonth()
+        {
+            $month = date('n',now());
+            $query = "SELECT p.id_pengeluaran, tgl_pengeluaran, sum(harga) as jml
+                FROM pengeluaran p 
+                inner join detail_pengeluaran dp 
+                on p.id_pengeluaran = dp.id_pengeluaran 
+                where month(tgl_pengeluaran) = '$month' 
+                  AND (jenis='pengeluaran harian' OR jenis='pengeluaran pesanan')
+                group by month(tgl_pengeluaran)";
+                
+            $get =  $this->db->query($query);
+            if($get->num_rows() > 0){
+                return $get->row();
+            }else{
+                return (object) [
+                    'id_penjualan' => null,
+                    'tgl_penjualan' => null,
+                    'jml' => 0,
+                ];
+            }
+        }
+
+        public function monthlyReport()
+        {
+            $query = "SELECT DATE_FORMAT(pengeluaran.tgl_pengeluaran, '%Y, %m') AS periode,
+              sum(detail_pengeluaran.harga) AS pengeluaran
+              FROM pengeluaran, detail_pengeluaran
+              WHERE (jenis='pengeluaran harian' OR jenis='pengeluaran pesanan')
+                AND pengeluaran.id_pengeluaran=detail_pengeluaran.id_pengeluaran
+              GROUP BY DATE_FORMAT(pengeluaran.tgl_pengeluaran, '%Y, %m')
+              ORDER BY pengeluaran.tgl_pengeluaran DESC";
+            return $this->db->query($query)->result_array();
+        }
+
+        public function dailyReport($date)
+        {
+            $month = date('m', strtotime($date));
+            $year = date('Y', strtotime($date));
+            $query = "SELECT pengeluaran.tgl_pengeluaran AS periode,
+              sum(detail_pengeluaran.harga) AS pengeluaran
+              FROM pengeluaran, detail_pengeluaran
+              WHERE (jenis='pengeluaran harian' OR jenis='pengeluaran pesanan')
+                AND pengeluaran.id_pengeluaran = detail_pengeluaran.id_pengeluaran
+                AND MONTH(pengeluaran.tgl_pengeluaran) = $month
+                AND YEAR(pengeluaran.tgl_pengeluaran) = $year
+              GROUP BY pengeluaran.tgl_pengeluaran
+              ORDER BY pengeluaran.tgl_pengeluaran DESC";
+            return $this->db->query($query)->result_array();
         }
 
         public function rules(){

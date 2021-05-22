@@ -88,13 +88,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>
@@ -129,6 +123,7 @@
                     "orderable": false,
                     "targets": 4
                 }, ],
+                "order" : []
             } );
 
             t.on( 'order.dt search.dt', function () {

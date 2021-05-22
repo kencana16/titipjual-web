@@ -4,11 +4,11 @@
 
         public function check_credential(){
             /*
-            data1 and query1 is used to check user table with email and password
+            data1 and query1 is used to check user table with phone and password
             data2 and query2 is used to check user table with username and password
             */
             $data1 = array(
-                'email' => $this->input->post('usernameoremail'),
+                'no_hp' => $this->input->post('usernameorphone'),
                 'password' => md5($this->input->post('password'))
             );
             $query1 = $this->db->get_where('user', $data1, 1);
@@ -16,7 +16,7 @@
                 return $query1->row();
             }else{
                 $data2 = array(
-                    'username' => $this->input->post('usernameoremail'),
+                    'username' => $this->input->post('usernameorphone'),
                     'password' => md5($this->input->post('password'))
                 );
     

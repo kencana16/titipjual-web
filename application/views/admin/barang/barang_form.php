@@ -32,7 +32,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">
-                            <?php echo isset($barang) ? 'Edit barang':'Tambah barang' ?>
+                            <?php echo isset($barang) ? 'Edit Produk':'Tambah Produk' ?>
                         </h1>
                     </div>
 
@@ -58,13 +58,25 @@
                                              <?php echo isset($barang) ? 'value="'.$barang->id_barang.'"':'' ?>>
 
                                             <div class="form-group row">
-                                                <label for="namaBarang" class="col-lg-2 col-form-label">Nama Barang</label>
+                                                <label for="namaBarang" class="col-lg-2 col-form-label">Nama Produk</label>
                                                 <div class="col-lg-10">
                                                     <input type="text" class="form-control <?php echo form_error('namaBarang') ? 'is-invalid':'' ?>"
                                                      id="namaBarang"  name="namaBarang"  placeholder=""
-                                                     <?php echo isset($barang) ? 'value="'.$barang->nama_barang.'"':'' ?>>
+                                                     value="<?=(isset($barang))? $barang->nama_barang : set_value('namaBarang') ?>" >
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('namaBarang') ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="satuan" class="col-lg-2 col-form-label">Satuan</label>
+                                                <div class="col-lg-10">
+                                                    <input type="text" class="form-control <?php echo form_error('satuan') ? 'is-invalid':'' ?>"
+                                                     id="satuan"  name="satuan"  placeholder=""
+                                                     value="<?=(isset($barang))? $barang->satuan : set_value('satuan') ?>" >
+                                                    <div class="invalid-feedback">
+                                                        <?php echo form_error('satuan') ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -77,7 +89,7 @@
                                                     </div>
                                                     <input type="text" class="form-control  <?php echo form_error('hargaNormal') ? 'is-invalid':'' ?>
                                                      price" id="hargaNormal" name="hargaNormal"  placeholder=""
-                                                     <?php echo isset($barang) ? 'value="'.number_format($barang->harga_satuan_normal).'"':'' ?>>
+                                                     value="<?=(isset($barang))? number_format($barang->harga_satuan_normal): set_value('hargaNormal') ?>" >
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('hargaNormal') ?>
                                                     </div>
@@ -92,7 +104,7 @@
                                                     </div>
                                                     <input type="text" class="form-control <?php echo form_error('hargaReseller') ? 'is-invalid':'' ?> 
                                                      price" id="hargaReseller" name="hargaReseller"  placeholder=""
-                                                     <?php echo isset($barang) ? 'value="'.number_format($barang->harga_satuan_reseller).'"':'' ?>>
+                                                     value="<?=(isset($barang))? number_format($barang->harga_satuan_reseller): set_value('hargaReseller') ?>" >
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('hargaReseller') ?>
                                                     </div>
@@ -102,6 +114,18 @@
                                             <button type="submit" class="btn btn-primary">Simpan</button>
 
                                         </form>
+
+                                        <div class="text-right small <?=(!isset($barang))? ' d-none': '' ?>">
+                                            <div class="row">
+                                                <div class="col">Dibuat :</div>
+                                                <div class="col-auto"><?=$barang->date_created?></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">Terakhir diperbarui :</div>
+                                                <div class="col-auto"><?=$barang->date_modified?></div>
+                                            </div>
+                                        </div>
+
                                    </div>
                                 </div>
                             </div>
@@ -117,13 +141,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>

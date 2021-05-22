@@ -49,7 +49,7 @@
                                    <div class="col py-2">
                                         <?php if ($this->session->flashdata('success')): ?>
                                             <div class="alert alert-success" role="alert">
-                                                <?php var_dump( $this->session->flashdata('success')) ?>
+                                                <?= $this->session->flashdata('success') ?>
                                             </div>
                                         <?php endif; ?>
 
@@ -61,7 +61,7 @@
                                                 <label for="tgl" class="col-lg-2 col-form-label">Tanggal Pengeluaran</label>
                                                 <div class="col-lg-10">
                                                     <input type="date" class="form-control"
-                                                     id="tgl" name="tgl"  placeholder=""
+                                                     id="tgl" name="tgl"  placeholder="" 
                                                      value="<?= date("Y-m-d", strtotime($pengeluaran->tgl_pengeluaran))?>">
                                                 </div>
                                             </div>
@@ -71,6 +71,7 @@
                                                 <div class="input-group col-lg-10">
                                                 <select class="custom-select" name="jenis" id="jenis">
                                                     <option value="pengeluaran harian" <?php echo ($pengeluaran->jenis == "pengeluaran harian") ? " selected" : "" ?>>Pengeluaran harian (Modal)</option>
+                                                    <option value="pengeluaran pesanan" <?php echo ($pengeluaran->jenis == "pengeluaran pesanan") ? " selected" : "" ?>>Pengeluaran pesanan</option>
                                                     <option value="lainnya" <?php echo ($pengeluaran->jenis == "lainnya") ? " selected" : "" ?>>Lainnya</option>
                                                 </select>
                                                 </div>
@@ -99,7 +100,7 @@
                                                                     <div class="input-group-text">Rp.</div>
                                                                 </div>
                                                                 <input type="text" class="form-control price form-control-sm" name="harga[]" placeholder="Harga" aria-label="Harga"
-                                                            value="<?=$detail_pengeluaran->harga?>">
+                                                            value="<?=number_format($detail_pengeluaran->harga)?>">
                                                             </div>
                                                         </div>
                                                         
@@ -141,10 +142,35 @@
                                                     <a href="#" class="add-field btn btn-sm btn-outline-primary col-md-1 mb-2 mb-md-0"><i class="fas fa-plus"></i></a>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-sm-6 text-lg-right"></div>
+                                                <div class="col-lg-4 col-sm-6 p-0">
+                                                    <div class="input-group  border border-primary rounded">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp.</div>
+                                                        </div>
+                                                        <input type="text" class="form-control font-weight-bold bg-light" 
+                                                         name="total" placeholder="Total" aria-label="total" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
                                             <button type="submit" class="btn btn-primary mt-4">Simpan</button>
 
                                         </form>
+
+                                        <div class="text-right small <?=(!isset($pengeluaran))? ' d-none': '' ?>">
+                                            <div class="row">
+                                                <div class="col">Dibuat :</div>
+                                                <div class="col-auto"><?=$pengeluaran->date_created?></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">Terakhir diperbarui :</div>
+                                                <div class="col-auto"><?=$pengeluaran->date_modified?></div>
+                                            </div>
+                                        </div>
+
                                    </div>
                                 </div>
                             </div>
@@ -160,13 +186,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>
@@ -223,6 +243,14 @@
             }
         }
 
+        function removeFormatting(value){
+            var group = new Intl.NumberFormat().format(1111).replace(/1/g, '');
+            var decimal = new Intl.NumberFormat().format(1.1).replace(/1/g, '');
+            var reversedVal = value.replace(new RegExp('\\' + group, 'g'), '');
+            reversedVal = reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+            return reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+        }
+
 
         $('.add-field').click(function(){
             $('.barang-group').clone().appendTo('.barang-group-dynamic');
@@ -239,12 +267,33 @@
             
             const prices = document.querySelectorAll('.price');
             priceFormat(prices[prices.length-2]);
+
+            $('html, body').animate({
+                scrollTop: $(".barang-group").offset().top
+            }, 1000);
         });
         $(document).on('click', '.remove-field', function(e) {
             $(this).parents('.remove').remove();
             e.preventDefault();
 
         });
+
+        $('input[name="harga[]"]').focusout(function(){
+            countTotal();
+        });
+        countTotal();
+        function countTotal(){
+            var total = 0;
+            $('input[name="harga[]"]').each(function(){
+                console.log("+"+parseInt(removeFormatting($(this).val())));
+                console.log($(this));
+                subtotal = parseInt(removeFormatting($(this).val()));
+                if(Number.isNaN(subtotal)){return;};
+                total += subtotal;
+                console.log("total : "+total);
+            });
+            $('input[name="total"]').val(Intl.NumberFormat().format(total));
+        };
 
         function dataValidation(){
             var emptyInput = false

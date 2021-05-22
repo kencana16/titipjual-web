@@ -62,7 +62,7 @@
                                                 <div class="col-lg-10">
                                                     <input type="text" class="form-control <?php echo form_error('namaPenjual') ? 'is-invalid':'' ?>"
                                                      id="namaPenjual" name="namaPenjual" 
-                                                     <?php echo isset($penjual) ? 'value="'.$penjual->nama_penjual.'"':'' ?>>
+                                                     value="<?=(isset($penjual))? $penjual->nama_penjual : set_value('namaPenjual') ?>">
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('namaPenjual') ?>
                                                     </div>
@@ -74,7 +74,7 @@
                                                 <div class="input-group col-lg-10">
                                                     <input type="number" class="form-control <?php echo form_error('noHP') ? 'is-invalid':'' ?>" 
                                                      id="noHP" name="noHP"
-                                                     <?php echo isset($penjual) ? 'value="'.$penjual->no_hp.'"':'' ?>>
+                                                     value="<?=(isset($penjual))? $penjual->no_hp: set_value('noHP') ?>">
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('noHP') ?>
                                                     </div>
@@ -85,7 +85,7 @@
                                                 <label for="alamat" class="col-lg-2 col-form-label">Alamat</label>
                                                 <div class="col-lg-10">
                                                     <textarea class="form-control <?php echo form_error('alamat') ? 'is-invalid':'' ?>" 
-                                                     id="alamat" name="alamat" row="3"><?php echo isset($penjual) ? $penjual->alamat : '' ?></textarea>
+                                                     id="alamat" name="alamat" row="3"><?=(isset($penjual))? $penjual->alamat: set_value('alamat') ?></textarea>
                                                     <div class="invalid-feedback">
                                                         <?php echo form_error('alamat') ?>
                                                     </div>
@@ -95,6 +95,18 @@
                                             <button type="submit" class="btn btn-primary">Simpan</button>
 
                                         </form>
+                                        
+                                        <div class="text-right small <?=(!isset($penjual))? ' d-none': '' ?>">
+                                            <div class="row">
+                                                <div class="col">Dibuat :</div>
+                                                <div class="col-auto"><?=$penjual->date_created?></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">Terakhir diperbarui :</div>
+                                                <div class="col-auto"><?=$penjual->date_modified?></div>
+                                            </div>
+                                        </div>
+
                                    </div>
                                 </div>
                             </div>
@@ -110,13 +122,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>

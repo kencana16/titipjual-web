@@ -33,7 +33,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Daftar Barang</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Daftar Produk</h1>
                     </div>
 
                     <!-- Content Row -->
@@ -52,8 +52,10 @@
                                                 <thead>
                                                     <th>No</th>
                                                     <th>Nama Produk</th>
+                                                    <th>Satuan</th>
                                                     <th>Harga Normal</th>
                                                     <th>Harga Reseller</th>
+                                                    <!-- <th>Estimasi Modal (/KG)</th> -->
                                                     <th>Aksi</th>
                                                 </thead>
                                                 <tbody>
@@ -62,7 +64,9 @@
                                                         <td></td>
                                                         <td><?= $barang->nama_barang?></td>
                                                         <td class="text-right"><?= 'Rp.&nbsp;'.number_format($barang->harga_satuan_normal)?></td>
+                                                        <td ><?= $barang->satuan ?></td>
                                                         <td class="text-right"><?= 'Rp.&nbsp;'.number_format($barang->harga_satuan_reseller)?></td>
+                                                        <!-- <td class="text-right"><?php//echo 'Rp.&nbsp;'.number_format($barang->estimasi_modal_per_kg)?></td> -->
                                                         <td class="text-md-left text-center">
                                                             <a class="btn btn-sm btn-primary m-1 " href="<?=site_url('barang/edit_barang/'.$barang->id_barang)?>">
                                                                 <i class="fas fa-edit"></i>
@@ -95,13 +99,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>

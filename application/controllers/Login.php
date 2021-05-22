@@ -31,11 +31,19 @@ class Login extends CI_Controller {
 			$logininfo = array(
 				'is_logged_in' => true,
 				'id_user' => $valid_user->id_user,
+				'id_penjual' => $valid_user->id_penjual,
 				'username' => $valid_user->username,
-				'photo' => $profile_picture_path
+				'no_hp' => $valid_user->no_hp,
+				'photo' => $profile_picture_path,
+				'role' => $valid_user->role
 			);
 			$this->session->set_userdata($logininfo);
-			redirect('dashboard');
+			if($this->session->userdata('role') == 0){
+				redirect('dashboard');
+			}else{
+				redirect('penjualanku');
+			}
+			
 		}
 	}
 

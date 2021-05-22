@@ -6,7 +6,9 @@
     <i class="fa fa-bars"></i>
 </button>
 
-
+<div class="d-none d-sm-block mr-auto my-2 my-md-0 mw-100">
+    <h6 class="h5 font-weight-bold mb-0 text-primary">SISTEM INFORMASI PENJUALAN PAO</h1>
+</div>
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
@@ -26,19 +28,11 @@
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="<?=base_url('profile')?>">
                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                 Profile
             </a>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                Settings
-            </a>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                Activity Log
-            </a>
-            <div class="dropdown-divider"></div>
+            <!-- <div class="dropdown-divider"></div> -->
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout

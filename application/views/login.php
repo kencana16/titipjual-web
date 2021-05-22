@@ -33,7 +33,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h5 text-gray-800 mb-4">SISTEM PENCATATAN KEUANGAN UMKM ‘HALAL BERKAH’</h1>
+                                        <h1 class="h5 text-gray-800 mb-4">SISTEM INFORMASI PENJUALAN UMKM ‘PAO’</h1>
                                         <h1 class="h3 text-gray-900 mb-4">Login</h1>
                                     </div>
                                     <?php if ($this->session->flashdata('error')): ?>
@@ -44,9 +44,9 @@
                                     <form class="user" action="<?= base_url('login/check_login')?>" method="POST">
                                         <div class="form-group">
                                             <!-- <label for="email">E-mail</label> -->
-                                            <input type="email" class="form-control form-control-user"
-                                                name="usernameoremail" id="usernameoremail" aria-describedby="emailHelp"
-                                                placeholder="Masukkan Email">
+                                            <input type="text" class="form-control form-control-user"
+                                                name="usernameorphone" id="usernameorphone" aria-describedby="emailHelp"
+                                                placeholder="Masukkan Username/No. HP">
                                         </div>
                                         <div class="form-group">
                                             <!-- <label for="password">Kata Sandi</label> -->
@@ -55,18 +55,18 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Ingat saya</label>
+                                                <input type="checkbox" class="custom-control-input" id="passwordHide">
+                                                <label class="custom-control-label" for="passwordHide" onclick="showHide()">Tampilkan Password</label>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
                                     </form>
-                                    <hr>
+                                    <!-- <hr>
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Lupa Password?</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -82,6 +82,15 @@
     <?php $this->load->view('_partial/jsScript') ?>
 
     <script>
+        function showHide() {
+        var pwd = document.getElementById('password');
+        if (pwd.type === "password") {
+            pwd.type = "text";
+        } else {
+            pwd.type = "password";
+        }
+        }
+
         setTimeout(() => {
             const alert = document.getElementById("alert");
             alert.parentNode.removeChild(alert);

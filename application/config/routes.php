@@ -50,7 +50,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'login';
-$route['404_override'] = '';
+$route['404_override'] = 'errors/error404';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['barang'] = 'barang/daftar_barang';
+$route['barang/edit_barang'] = 'barang/daftar_barang';
+$route['barang/hapus_barang'] = 'barang/daftar_barang';
+
+$route['penjual'] = 'penjual/daftar_penjual';
+$route['penjual/edit_penjual'] = 'penjual/daftar_penjual';
+$route['penjual/hapus_penjual'] = 'penjual/daftar_penjual';
+
+$route['pengeluaran/edit_pengeluaran'] = 'pengeluaran/daftar_pengeluaran';
+$route['pengeluaran/detail_pengeluaran'] = 'pengeluaran/daftar_pengeluaran';
+$route['pengeluaran/hapus_pengeluaran'] = 'pengeluaran/daftar_pengeluaran';
+
+$route['penjualan/edit_penjualan'] = 'penjualan/daftar_penjualan';
+$route['penjualan/hapus_penjualan'] = 'penjualan/daftar_penjualan';
+
+$route['pesanan/edit_pesanan'] = 'pesanan/daftar_pesanan';
+$route['pesanan/hapus_pesanan'] = 'pesanan/daftar_pesanan';
+
+$route['penjualanku/edit_penjualan'] = 'penjualanku/daftar_penjualan';
+$route['penjualanku/hapus_penjualan'] = 'penjualanku/daftar_penjualan';
+
+$route['pesananku/edit_pesanan'] = 'pesananku/daftar_pesanan';
+$route['pesananku/hapus_pesanan'] = 'pesananku/daftar_pesanan';
 
 

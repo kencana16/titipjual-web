@@ -5,7 +5,8 @@
 
         public function add(){
             $data = array(
-                'nama_barang' => $this->input->post('namaBarang'),
+                'nama_barang' => ucfirst($this->input->post('namaBarang')),
+                'satuan' => ucfirst($this->input->post('satuan')),
                 'harga_satuan_normal' => $this->input->post('hargaNormal'),
                 'harga_satuan_reseller' => $this->input->post('hargaReseller'),
                 'date_created' => date('Y-m-d H:i:s',now()),
@@ -16,7 +17,8 @@
 
         public function edit($id){
             $data =  array(
-                'nama_barang' => $this->input->post('namaBarang'),
+                'nama_barang' => ucfirst($this->input->post('namaBarang')),
+                'satuan' => ucfirst($this->input->post('satuan')),
                 'harga_satuan_normal' => $this->input->post('hargaNormal'),
                 'harga_satuan_reseller' => $this->input->post('hargaReseller'),
                 'date_modified' => date('Y-m-d H:i:s',now())
@@ -41,6 +43,14 @@
                 'id_barang'=>$id
             );
             return $this->db->delete($this->_table_name, $data);
+        }
+
+        
+        public function getJsonBarang(){
+            $id = $this->input->post('id_barang');
+            if($id==""){return array();}
+            $query = "SELECT * FROM barang WHERE id_barang=$id";
+            return $this->db->query($query)->result_array();
         }
 
         public function rules(){

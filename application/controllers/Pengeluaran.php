@@ -10,6 +10,9 @@ class Pengeluaran extends CI_Controller {
 			$this->session->set_flashdata('error', 'Harap login terlebih dahulu');
 			redirect('login');
 		}
+		if($this->session->userdata('role') == 1){
+			redirect('penjualanku');
+		}
 
 		$this->load->model('pengeluaran_models');
     }
@@ -26,7 +29,7 @@ class Pengeluaran extends CI_Controller {
     }
 
     public function simpan_pengeluaran(){
-        if($this->pengeluaran_models->add())
+        $this->pengeluaran_models->add();
         $this->session->set_flashdata('success', 'Berhasil Ditambah');
         redirect(site_url('pengeluaran/tambah_pengeluaran'));
 

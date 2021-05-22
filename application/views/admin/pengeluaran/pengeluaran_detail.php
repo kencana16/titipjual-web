@@ -45,21 +45,21 @@
                                 <a class="btn btn-sm text-primary" href="<?php echo site_url('pengeluaran') ?>"><i class="fas fa-arrow-left mr-1"></i> Kembali<span class="hide-mobile"> ke data pengeluaran</span></a>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-3">ID pengeluaran</div>
-                                        <div class="col-md-9">: <?=$pengeluaran->id_pengeluaran?></div>
+                                    <div class="row mb-md-0 mb-1">
+                                        <div class="col-md-3 col-6 font-weight-bold">ID pengeluaran</div>
+                                        <div class="col-md-9 col-6">: <?=$pengeluaran->id_pengeluaran?></div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Tanggal pengeluaran</div>
-                                        <div class="col-md-9">: <span class="tanggal-indo"><?=$pengeluaran->tgl_pengeluaran?></span></div>
+                                    <div class="row mb-md-0 mb-1">
+                                        <div class="col-md-3 col-6 font-weight-bold">Tanggal pengeluaran</div>
+                                        <div class="col-md-9 col-6">: <span class="tanggal-indo"><?=$pengeluaran->tgl_pengeluaran?></span></div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Jenis pengeluaran</div>
-                                        <div class="col-md-9">: <?=$pengeluaran->jenis?></div>
+                                    <div class="row mb-md-0 mb-1">
+                                        <div class="col-md-3 col-6 font-weight-bold">Jenis pengeluaran</div>
+                                        <div class="col-md-9 col-6">: <?=$pengeluaran->jenis?></div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">Total</div>
-                                        <div class="col-md-9">: Rp. <?=number_format($pengeluaran->jml_pengeluaran)?></div>
+                                    <div class="row mb-md-0 mb-1">
+                                        <div class="col-md-3 col-6 font-weight-bold">Total</div>
+                                        <div class="col-md-9 col-6">: Rp. <?=number_format($pengeluaran->jml_pengeluaran)?></div>
                                     </div>
                                     
                                     <div class="my-2">
@@ -99,13 +99,13 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th colspan="3" class="text-right">Total halaman ini:</th>
+                                                        <th colspan="3" class="text-right">Total :</th>
                                                         <th></th>
                                                     </tr>
-                                                    <tr>
+                                                    <!-- <tr>
                                                         <th colspan="3" class="text-right">Total keseluruhan:</th>
                                                         <th></th>
-                                                    </tr>
+                                                    </tr> -->
                                                 </tfoot>
                                             </table>
                                         </div>
@@ -124,13 +124,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
+            <?php $this->load->view('_partial/footer') ?>
             <!-- End of Footer -->
 
         </div>
@@ -156,6 +150,7 @@
     <script>
         $(document).ready( function () {
             var t = $('#dataTables').DataTable( {
+                "paging": false,
                 "columnDefs": [ {
                     "searchable": false,
                     "orderable": false,
@@ -191,9 +186,9 @@
         
                     // Update footer
                     $( api.column( 3 ).footer() ).html(
-                        'Rp. '+numberWithCommas(pageTotal)
+                        'Rp. '+numberWithCommas(total)
                     );
-                    $('tr:eq(1) th:eq(1)', api.table().footer()).html('Rp. '+numberWithCommas(total));
+                    // $('tr:eq(1) th:eq(1)', api.table().footer()).html('Rp. '+numberWithCommas(total));
                 }
             } );
 

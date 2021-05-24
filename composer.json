@@ -1,0 +1,9 @@
+{
+	"description": "platform to maonitoring titip jual",
+	"name": "kencana16/titipjual",
+	"type": "project",
+	"require": {
+		"php": "^7.2",
+        "chriskacerguis/codeigniter-restserver": "^3.1"
+	}
+}

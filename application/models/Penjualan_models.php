@@ -65,7 +65,6 @@
 
             //remove deleted data in database
             $DbBarangIds =  $this->db->query("SELECT `id_detail_penjualan` FROM `detail_penjualan` where `id_penjualan`= $id")->result();
-            $tempIds;
             foreach($DbBarangIds as $key => $DbBarangId){
                 $tempId[$key] = $DbBarangId->id_detail_penjualan;
             }
@@ -113,7 +112,7 @@
         public function showAll(){
             $query = "SELECT p.id_penjualan, nama_penjual, tgl_penjualan, SUM(jml_produk) as jml_produk, SUM(jml_terjual) as jml_terjual, SUM(jml_uang) as jml_uang
                 FROM penjualan p 
-                INNER JOIN penjual pj 
+                LEFT JOIN penjual pj 
                     ON p.id_penjual = pj.id_penjual 
                 INNER JOIN detail_penjualan dp
                     ON p.id_penjualan = dp.id_penjualan
@@ -333,6 +332,173 @@
               GROUP BY p.tgl_penjualan 
               ORDER BY p.tgl_penjualan DESC";
             return $this->db->query($query)->result_array();
+        }
+
+        public function get_penjualan_barang($id_barang = "", $id_penjual = ""){
+            $hari = $this->db->query("Select DAYNAME(CURDATE()-1) as hari")->row()->hari;
+
+            $query_mingguan = "SELECT DAYNAME(penjualan.tgl_penjualan) as hari, barang.id_barang, AVG(jml_terjual) as jml FROM `detail_penjualan`
+            LEFT JOIN penjualan ON penjualan.id_penjualan = detail_penjualan.id_penjualan
+            LEFT JOIN barang ON barang.id_barang = detail_penjualan.id_barang
+            WHERE id_penjual = $id_penjual
+            AND barang.id_barang = $id_barang
+            AND DAYNAME(penjualan.tgl_penjualan) = DAYNAME(CURDATE())
+            GROUP BY DAYNAME(penjualan.tgl_penjualan), nama_barang  
+            ORDER BY `barang`.`nama_barang` ASC";
+
+            $mingguan = $this->db->query($query_mingguan)->row();
+            if($mingguan == null){
+                $mingguan_val = "Data belum ada";
+            }else{
+                $mingguan_val = floor($mingguan->jml);
+            }
+            
+            $query_harian = "SELECT DAYNAME(penjualan.tgl_penjualan), barang.id_barang, AVG(jml_terjual) as jml FROM `detail_penjualan`
+            LEFT JOIN penjualan ON penjualan.id_penjualan = detail_penjualan.id_penjualan
+            LEFT JOIN barang ON barang.id_barang = detail_penjualan.id_barang
+            WHERE id_penjual = $id_penjual
+            AND barang.id_barang = $id_barang
+            GROUP BY  nama_barang  
+            ORDER BY `barang`.`nama_barang` ASC";
+
+            $harian = $this->db->query($query_harian)->row();
+            if($harian == null){
+                $harian_val = "Data belum ada";
+            }else{
+                $harian_val = floor($harian->jml);
+            }
+
+            $result = array(
+                'hari' => $hari,
+                'mingguan' => $mingguan_val,
+                'harian' => $harian_val
+            );
+
+            return $result;
+        }
+
+
+
+        public function get($id = null, $id_penjual = null, $tanggal = null)
+        {
+            if($id != null){
+                $this->db->where("$this->_table_name.id_penjualan", $id);
+            }
+            if($id_penjual != null){
+                $this->db->where("$this->_table_name.id_penjual", $id_penjual);
+            }
+            if($tanggal != null){
+                $arrTgl = explode(" - ", $tanggal);
+                if(sizeof($arrTgl) == 2){
+                    $this->db->where('tgl_penjualan >=', $this->formatDate($arrTgl[0]));
+                    $this->db->where('tgl_penjualan <=', $this->formatDate($arrTgl[1]));
+                }else if(sizeof($arrTgl) == 1){
+                    $this->db->where('tgl_penjualan', $this->formatDate($arrTgl[0]));
+                }
+            }
+            $this->db->select("$this->_table_name.*, nama_penjual, no_hp, sum(jml_produk) as jml_produk, sum(jml_terjual) as jml_terjual");
+            $this->db->select("sum(jml_uang) as total");
+            $this->db->from($this->_table_name);
+            $this->db->join('penjual', "$this->_table_name.id_penjual = penjual.id_penjual", 'left');
+            $this->db->join("$this->_detail_table_name", "$this->_table_name.id_penjualan = $this->_detail_table_name.id_penjualan", 'left');
+            $this->db->group_by("$this->_table_name.id_penjualan");
+            $this->db->order_by('date_created', 'DESC');
+            $this->db->order_by('status', 'ASC');
+            $results = $this->db->get()->result_array();
+
+            foreach($results as $key => $result){
+                $id_penjualan = $result['id_penjualan'];
+                $results[$key]['dibayar'] = $this->db
+                    ->select("sum(jumlah_uang)as dibayar")
+                    ->from($this->_pembayaran_table)
+                    ->where(array('id_penjualan'=>$id_penjualan))
+                    ->get()->row()->dibayar;
+
+                if($results[$key]['dibayar'] == null){
+                    $results[$key]['dibayar'] = "0";
+                }
+
+                $results[$key]['detail_barang'] = $this->db
+                    ->select("$this->_detail_table_name.*")
+                    ->select("nama_barang, harga_satuan_reseller")
+                    ->from($this->_detail_table_name)
+                    ->join("barang", "barang.id_barang = $this->_detail_table_name.id_barang")
+                    ->where(array('id_penjualan'=>$id_penjualan))
+                    ->get()
+                    ->result_array();
+
+                $results[$key]['detail_pembayaran'] = $this->db->get_where($this->_pembayaran_table, array('id_penjualan'=>$id_penjualan))->result_array();
+
+            }
+            return $results;
+        }
+
+        private function formatDate($date)
+        {
+            
+            $date = str_replace('/', '-', $date);
+            return date('Y-m-d', strtotime($date));
+        }
+
+        
+        public function post($penjualan, $detail_penjualan)
+        {
+            $penjualan_result = $this->db->insert($this->_table_name, $penjualan);
+            $penjualan_id = $this->db->insert_id();
+
+            foreach ($detail_penjualan as $key => $value) {
+                $detail_penjualan[$key] = array(
+                    'id_penjualan' => $penjualan_id,
+                    'id_barang' => $detail_penjualan[$key]['id_barang'],
+                    'jml_produk' => $detail_penjualan[$key]['jml_produk'],
+
+                );
+            }
+            $detail_penjualan_result = $this->db->insert_batch($this->_detail_table_name, $detail_penjualan);
+            
+            return $penjualan_result && $detail_penjualan_result;
+        }
+
+        
+        public function rekap($arr)
+        {
+            $jml = 0;
+            foreach ($arr as $array) {
+                unset($array['date_modified']);
+                unset($array['nama_barang']);
+                unset($array['harga_satuan_reseller']);
+                $this->db->replace($this->_detail_table_name, $array);
+
+                $jml += $array['jml_terjual'];
+            }
+            if($jml > 0){
+                $this->db->set('status', 1)->where('id_penjualan', $arr[0]['id_penjualan'])->update('penjualan');
+            }else{
+                $this->db->set('status', 0)->where('id_penjualan', $arr[0]['id_penjualan'])->update('penjualan');
+            }
+        }
+
+        public function add_pembayaran($data)
+        {
+            $return =  $this->db->insert($this->_pembayaran_table, $data);
+            
+            $total = $this->db
+                    ->select("sum(jml_uang)as total")
+                    ->from($this->_detail_table_name)
+                    ->where(array('id_penjualan'=>$data['id_penjualan']))
+                    ->get()->row()->total;
+            $dibayar = $this->db
+                    ->select("sum(jumlah_uang)as dibayar")
+                    ->from($this->_pembayaran_table)
+                    ->where(array('id_penjualan'=>$data['id_penjualan']))
+                    ->get()->row()->dibayar;
+            if($total == null){$total = 0;}
+            if($dibayar == null){$dibayar = 0;}
+            if($total != 0 && $total==$dibayar){
+                $this->db->set('status', "2")->where('id_penjualan' , $data['id_penjualan'])->update($this->_table_name);
+            }
+
+            return $return;
         }
 
     }

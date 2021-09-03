@@ -69,12 +69,12 @@
     </div>
 
     <!-- Nav Item -->
-    <li class="nav-item   <?=($this->uri->segment(1) == "pengeluaran")? "active" : ""?>">
+    <!-- <li class="nav-item   <?=($this->uri->segment(1) == "pengeluaran")? "active" : ""?>">
         <a class="nav-link" href="<?=site_url('pengeluaran')?>" >
             <i class="fas fa-donate"></i>
             <span>Pengeluaran</span>
         </a>
-    </li>
+    </li> -->
 
     <!-- Nav Item -->
     <!-- <li class="nav-item">

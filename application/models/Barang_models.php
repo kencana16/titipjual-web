@@ -84,4 +84,28 @@
                 ]
             ];
         }
+
+        public function get($id = null)
+        {
+            if($id != null){
+                $this->db->where("$this->_table_name.id_barang", $id);
+            }
+            return $this->db->get($this->_table_name)->result_array();
+        }
+
+        public function post($array)
+        {
+            return $this->db->insert($this->_table_name, $array);
+        }
+
+        public function put($array)
+        {
+            unset($array['date_modified']);
+            return $this->db->replace($this->_table_name, $array);
+        }
+
+        public function deleteArray($array)
+        {
+            return $this->db->delete($this->_table_name, $array);
+        }
     }

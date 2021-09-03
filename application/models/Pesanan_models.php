@@ -72,7 +72,6 @@
 
             //remove deleted data in database
             $DbBarangIds =  $this->db->query("SELECT `id_detail_pesanan` FROM `detail_pesanan` where `id_pesanan`= $id")->result();
-            $tempIds;
             foreach($DbBarangIds as $key => $DbBarangId){
                 $tempId[$key] = $DbBarangId->id_detail_pesanan;
             }
@@ -305,5 +304,117 @@
             GROUP BY p.tgl_diambil 
             ORDER BY p.tgl_diambil DESC";
             return $this->db->query($query)->result_array();
+        }
+
+        
+
+
+
+        public function get($id_pesanan = null, $tanggal = null)
+        {
+            if($id_pesanan != null){
+                $this->db->where("$this->_table_name.id_pesanan", $id_pesanan);
+            }
+            if($tanggal != null){
+                $arrTgl = explode(" - ", $tanggal);
+                if(sizeof($arrTgl) == 2){
+                    $this->db->where('tgl_diambil >=', $this->formatDate($arrTgl[0])." 00:00:00");
+                    $this->db->where('tgl_diambil <=', $this->formatDate($arrTgl[1])." 23:59:59");
+                }else if(sizeof($arrTgl) == 1){
+                    $this->db->where('tgl_diambil >=', $this->formatDate($arrTgl[0])." 00:00:00");
+                    $this->db->where('tgl_diambil <=', $this->formatDate($arrTgl[0])." 23:59:59");
+                }
+            }
+            $this->db->select("$this->_table_name.*, nama_pemesan, sum(jml_barang) as jml_produk");
+            $this->db->select("sum(subtotal) as total");
+            $this->db->from($this->_table_name);
+            $this->db->join("$this->_detail_table_name", "$this->_table_name.id_pesanan = $this->_detail_table_name.id_pesanan", 'left');
+            $this->db->order_by('status', 'ASC');
+            $this->db->order_by('tgl_diambil', 'DESC');
+            $this->db->group_by("$this->_table_name.id_pesanan");
+            $results = $this->db->get()->result_array();
+
+            foreach($results as $key => $result){
+                $id_pesanan = $result['id_pesanan'];
+                $results[$key]['dibayar'] = $this->db
+                    ->select("sum(jumlah_uang)as dibayar")
+                    ->from($this->_pembayaran_table)
+                    ->where(array('id_pesanan'=>$id_pesanan))
+                    ->get()->row()->dibayar;
+
+                if($results[$key]['dibayar'] == null){
+                    $results[$key]['dibayar'] = "0";
+                }
+                $results[$key]['detail_barang'] = $this->db
+                    ->select("$this->_detail_table_name.*")
+                    ->select("nama_barang, harga_satuan_reseller, harga_satuan_normal")
+                    ->from($this->_detail_table_name)
+                    ->join("barang", "barang.id_barang = $this->_detail_table_name.id_barang")
+                    ->where(array('id_pesanan'=>$id_pesanan))
+                    ->get()
+                    ->result_array();
+                $results[$key]['detail_pembayaran'] = $this->db->get_where($this->_pembayaran_table, array('id_pesanan'=>$id_pesanan))->result_array();
+
+                foreach($results[$key]['detail_barang'] as $index => $row){
+                    if($result['jenis_harga'] == "harga_satuan_reseller"){
+                        $results[$key]['detail_barang'][$index]['harga_satuan'] = $results[$key]['detail_barang'][$index]['harga_satuan_reseller'];
+                    }else{
+                        $results[$key]['detail_barang'][$index]['harga_satuan'] = $results[$key]['detail_barang'][$index]['harga_satuan_normal'];
+                    }
+                }
+
+            }
+            return $results;
+        }
+
+        private function formatDate($date)
+        {
+            
+            $date = str_replace('/', '-', $date);
+            return date('Y-m-d', strtotime($date));
+        }
+
+        
+        public function post($pesanan, $detail_pesanan)
+        {
+
+
+            $pesanan_result = $this->db->insert($this->_table_name, $pesanan);
+            $pesanan_id = $this->db->insert_id();
+
+            foreach ($detail_pesanan as $key => $value) {
+                $detail_pesanan[$key]['id_pesanan'] = $pesanan_id;
+                
+                unset($detail_pesanan[$key]['harga_satuan_reseller']);
+                unset($detail_pesanan[$key]['harga_satuan_normal']);
+                unset($detail_pesanan[$key]['harga_satuan']);
+                unset($detail_pesanan[$key]['nama_barang']);
+            }
+            $detail_pesanan_result = $this->db->insert_batch($this->_detail_table_name, $detail_pesanan);
+            
+            return $pesanan_result && $detail_pesanan_result;
+        }
+
+        public function add_pembayaran($data)
+        {
+            $return =  $this->db->insert($this->_pembayaran_table, $data);
+
+            $total = $this->db
+                    ->select("sum(subtotal)as total")
+                    ->from($this->_detail_table_name)
+                    ->where(array('id_pesanan'=>$data['id_pesanan']))
+                    ->get()->row()->total;
+            $dibayar = $this->db
+                    ->select("sum(jumlah_uang)as dibayar")
+                    ->from($this->_pembayaran_table)
+                    ->where(array('id_pesanan'=>$data['id_pesanan']))
+                    ->get()->row()->dibayar;
+            if($total == null){$total = 0;}
+            if($dibayar == null){$dibayar = 0;}
+            if($total != 0 && $total==$dibayar){
+                $this->db->set('status', "2")->where('id_pesanan' , $data['id_pesanan'])->update($this->_table_name);
+            }
+
+            return $return;
         }
     }

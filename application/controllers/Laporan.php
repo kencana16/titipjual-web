@@ -73,7 +73,6 @@ class Laporan extends CI_Controller {
 			}
 			$result[] = array(
 				'periode' => $jual['periode'],
-				'pengeluaran' => $valPengeluaran,
 				'penjualan' => $jual['penjualan'],
 				'pesanan' => $valPesanan,
 			);

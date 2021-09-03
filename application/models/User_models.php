@@ -29,4 +29,22 @@
             }
         }
 
+        public function auth_phone_password($phone, $password)
+        {
+            $data = array(
+                'no_hp' => $phone,
+                'password' => md5($password)
+            );
+            $query = $this->db->get_where('user', $data, 1);
+            if($query->num_rows() > 0){
+                return $query->row();
+            }else{
+                return false;
+            }
+        }
+
+        public function showAll(){
+            return $this->db->get_where('user')->result_array();
+        }
+
     }

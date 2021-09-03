@@ -68,20 +68,16 @@
                                                 <thead>
                                                     <th>No</th>
                                                     <th>Waktu</th>
-                                                    <th>Pengeluaran</th>
                                                     <th>Penjualan</th>
                                                     <th>Pesanan</th>
-                                                    <th>Laba Bersih</th>
                                                 </thead>
                                                 <tbody>
                                                     <?php foreach($data as $row):?>
                                                         <tr>
                                                             <td></td>
                                                             <td class="tanggal-indo"><?=$row['periode']?></td>
-                                                            <td class="text-right"><?= "Rp. ".number_format($row['pengeluaran'])?></td>
                                                             <td class="text-right"><?= "Rp. ".number_format($row['penjualan'])?></td>
                                                             <td class="text-right"><?= "Rp. ".number_format($row['pesanan'])?></td>
-                                                            <td class="text-right"><?= "Rp. ".number_format(($row['penjualan']+$row['pesanan'])-($row['pengeluaran']))?></td>
                                                         </tr>
                                                     <?php endforeach;?>
                                                 </tbody>
